@@ -5,16 +5,10 @@
       isExpanded ? 'w-[180px]' : 'w-[115px]',
     ]"
   >
-    <button
-      @click="toggleSidebar"
-      class="absolute -right-5 top-[25.5px] flex items-center justify-center size-9 rounded-lg bg-white pa-[6px] text-gray-600 hover:bg-gray-100 transition-colors z-10"
-    >
-      <img
-        src="@/assets/icons/arrow-line-right.svg"
-        :class="{ 'rotate-180': isExpanded }"
-        alt="Expandir/Recolher"
-      />
-    </button>
+    <AppToggleButton 
+      :isExpanded="isExpanded" 
+      @toggle="toggleSidebar" 
+    />
     <nav class="flex flex-col w-full justify-center">
       <SidebarItem
         v-for="item in homeItem"
@@ -58,6 +52,7 @@
 <script setup>
 import { ref } from 'vue'
 import SidebarItem from './SidebarItem.vue'
+import AppToggleButton from './AppToggleButton.vue'
 
 defineOptions({
   name: 'AppSidebar',
