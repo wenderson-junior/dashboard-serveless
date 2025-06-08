@@ -5,13 +5,10 @@
       isExpanded ? 'w-[180px]' : 'w-[115px]',
     ]"
   >
-    <AppToggleButton 
-      :isExpanded="isExpanded" 
-      @toggle="toggleSidebar" 
-    />
+    <AppToggleButton :isExpanded="isExpanded" @toggle="toggleSidebar" />
     <nav class="flex flex-col w-full justify-center">
       <SidebarItem
-        v-for="item in homeItem"
+        v-for="item in generalItem"
         :key="item.to"
         :to="item.to"
         :icon="item.icon"
@@ -22,7 +19,7 @@
     </nav>
     <nav class="flex flex-col w-full mt-22 gap-4">
       <SidebarItem
-        v-for="item in generalItems"
+        v-for="item in featureItems"
         :key="item.to"
         :to="item.to"
         :icon="item.icon"
@@ -61,8 +58,8 @@ defineOptions({
 const isExpanded = ref(false)
 const showLabels = ref(false)
 
-const homeItem = [{ to: '/', icon: 'house-line', label: 'Visão geral' }]
-const generalItems = [
+const generalItem = [{ to: '/general', icon: 'house-line', label: 'Visão geral' }]
+const featureItems = [
   { to: '/reports', icon: 'invoice', label: 'Relatórios' },
   { to: '/', icon: 'chart-bar', label: 'Progressão' },
   { to: '/', icon: 'note-pencil', label: 'Assinaturas' },
