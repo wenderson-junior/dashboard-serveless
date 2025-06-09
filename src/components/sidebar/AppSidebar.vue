@@ -43,6 +43,24 @@
         :isExpanded="isExpanded"
         :showLabels="showLabels"
       />
+      <!-- Botão de logout com o mesmo layout dos outros itens -->
+      <button
+        @click="handleLogout"
+        :class="[
+          'flex items-center rounded-lg transition-colors relative px-[10px] size-11',
+          'text-regular-500 hover:bg-gray-100',
+          isExpanded ? 'w-full justify-start gap-2' : 'justify-center',
+        ]"
+      >
+        <component
+          :is="getSvgIcon('sign-out')"
+          class="size-6 text-regular-500"
+        />
+        <span
+          v-if="isExpanded && showLabels"
+          class="text-sm font-inter font-normal whitespace-nowrap"
+        >Sair</span>
+      </button>
     </nav>
   </aside>
 </template>
@@ -51,6 +69,8 @@
 import { ref } from 'vue'
 import SidebarItem from './SidebarItem.vue'
 import AppToggleButton from './AppToggleButton.vue'
+import { authService } from '@/services/authService'
+import { getSvgIcon } from '@/utils/iconLoader'
 
 defineOptions({
   name: 'AppSidebar',
@@ -70,9 +90,8 @@ const featureItems = [
   { to: '/', icon: 'note-pencil', label: 'Relatórios' },
 ]
 const portalItems = [
-  { to: '/', icon: 'gear-six', label: 'Config.' },
+  { to: '/configuracoes', icon: 'gear-six', label: 'Config.' },
   { to: '/', icon: 'question', label: 'Ajuda' },
-  { to: '/', icon: 'sign-out', label: 'Sair' },
 ]
 
 const toggleSidebar = () => {
@@ -84,5 +103,10 @@ const toggleSidebar = () => {
   } else {
     showLabels.value = false
   }
+}
+
+// Função para lidar com o logout quando o usuário clica no item "Sair"
+function handleLogout() {
+  authService.logout()
 }
 </script>

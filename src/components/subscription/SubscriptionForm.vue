@@ -127,37 +127,56 @@
       </div>
     </div>
 
+    <!-- Mensagem de erro -->
+    <div v-if="submitError" class="mt-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+      <p>{{ submitError }}</p>
+    </div>
+
+    <!-- Mensagem de sucesso -->
+    <div v-if="submitSuccess" class="mt-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+      <p>Assinatura criada com sucesso!</p>
+    </div>
+
     <div class="mt-8 flex flex-col sm:flex-row justify-end gap-4">
       <button
         @click="$emit('cancel')"
-        class="cursor-pointer text-sm rounded-[40px] px-4 py-2 border border-regular-600 text-regular-600 hover:bg-gray-50"
+        :disabled="isSubmitting"
+        class="cursor-pointer text-sm rounded-[40px] px-4 py-2 border border-regular-600 text-regular-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Cancelar
       </button>
       <button
         @click="submitForm"
-        class="cursor-pointer text-sm flex justify-center items-center px-4 py-3 gap-1 h-[48px] bg-regular-700 text-white rounded-[40px] hover:bg-regular-800"
+        :disabled="isSubmitting"
+        class="cursor-pointer text-sm flex justify-center items-center px-4 py-3 gap-1 h-[48px] bg-regular-700 text-white rounded-[40px] hover:bg-regular-800 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <img src="@/assets/icons/currency-circle-dollar.svg" alt="Dollar icon" class="w-6 h-6" />
-        Gerar assinatura
+        <span v-if="isSubmitting" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+        <img v-else src="@/assets/icons/currency-circle-dollar.svg" alt="Dollar icon" class="w-6 h-6" />
+        {{ isSubmitting ? 'Criando...' : 'Gerar assinatura' }}
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
+import { reactive, computed, ref } from 'vue'
 import BaseInput from '../ui/BaseInput.vue'
 import BaseTextarea from '../ui/BaseTextarea.vue'
 import BaseSwitch from '../ui/BaseSwitch.vue'
 import BaseLabel from '../ui/BaseLabel.vue'
 import BaseRadio from '../ui/BaseRadio.vue'
+import { subscriptionService } from '@/services/subscriptionService'
 
 defineOptions({
   name: 'SubscriptionForm',
 })
 
 const emit = defineEmits(['submit', 'cancel'])
+
+// Estados para feedback ao usuário
+const isSubmitting = ref(false)
+const submitError = ref('')
+const submitSuccess = ref(false)
 
 // Calcula a data mínima (hoje) para o input de data
 const minDate = computed(() => {
@@ -192,19 +211,24 @@ const subscription = reactive({
   chargeDate: '',
 })
 
-const submitForm = () => {
+const submitForm = async () => {
+  // Resetar estados
+  submitError.value = ''
+  submitSuccess.value = false
+  
+  // Validações
   if (!subscription.name) {
-    alert('Por favor, preencha o nome da assinatura')
+    submitError.value = 'Por favor, preencha o nome da assinatura'
     return
   }
 
   if (!subscription.value) {
-    alert('Por favor, preencha o valor da cobrança')
+    submitError.value = 'Por favor, preencha o valor da cobrança'
     return
   }
 
   if (!subscription.chargeDate) {
-    alert('Por favor, selecione a data da cobrança')
+    submitError.value = 'Por favor, selecione a data da cobrança'
     return
   }
 
@@ -213,16 +237,58 @@ const submitForm = () => {
   today.setHours(0, 0, 0, 0)
 
   if (selectedDate < today) {
-    alert('A data da cobrança deve ser maior ou igual à data atual')
+    submitError.value = 'A data da cobrança deve ser maior ou igual à data atual'
     return
   }
-
-  emit('submit', {
-    ...subscription,
-    id: Date.now(),
-    createdAt: new Date(),
-    nextChargeDate: subscription.chargeDate ? new Date(subscription.chargeDate) : new Date(),
-  })
+  
+  try {
+    isSubmitting.value = true
+    
+    // Preparar dados para envio
+    const subscriptionData = {
+      ...subscription,
+      // Garantir que o valor seja tratado como número
+      value: parseFloat(subscription.value).toString(),
+    }
+    
+    // Enviar para a API
+    const result = await subscriptionService.createSubscription(subscriptionData)
+    
+    // Sucesso
+    submitSuccess.value = true
+    
+    // Notificar o componente pai
+    emit('submit', result)
+    
+    // Resetar formulário após 1 segundo
+    setTimeout(() => {
+      // Resetar o formulário
+      Object.assign(subscription, {
+        name: '',
+        value: '',
+        frequency: 'monthly',
+        paymentMethods: {
+          pix: false,
+          debitCard: false,
+          creditCard: false,
+        },
+        feeOptions: {
+          passFees: false,
+          limitInstallments: false,
+        },
+        duration: 'unlimited',
+        proportionalValue: false,
+        description: '',
+        chargeDate: '',
+      })
+    }, 1000)
+    
+  } catch (error) {
+    console.error('Erro ao criar assinatura:', error)
+    submitError.value = 'Erro ao criar assinatura. Tente novamente.'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
