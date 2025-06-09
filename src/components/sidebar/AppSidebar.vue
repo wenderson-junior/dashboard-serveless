@@ -58,11 +58,11 @@ defineOptions({
 const isExpanded = ref(false)
 const showLabels = ref(false)
 
-const generalItem = [{ to: '/general', icon: 'house-line', label: 'Visão geral' }]
+const generalItem = [{ to: '/visao-geral', icon: 'house-line', label: 'Visão geral' }]
 const featureItems = [
-  { to: '/reports', icon: 'invoice', label: 'Relatórios' },
+  { to: '/assinaturas', icon: 'invoice', label: 'Assinaturas' },
   { to: '/', icon: 'chart-bar', label: 'Progressão' },
-  { to: '/', icon: 'note-pencil', label: 'Assinaturas' },
+  { to: '/', icon: 'note-pencil', label: 'Relatórios' },
 ]
 const portalItems = [
   { to: '/', icon: 'gear-six', label: 'Config.' },
