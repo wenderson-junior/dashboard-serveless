@@ -1,8 +1,9 @@
 <template>
   <aside
     :class="[
-      'h-full bg-white flex flex-col items-center pt-11 transition-all duration-200 relative px-6',
+      'h-full bg-white flex flex-col items-center pt-11 transition-all duration-300 relative px-6',
       isExpanded ? 'w-[180px]' : 'w-[115px]',
+      'z-40',
     ]"
   >
     <AppToggleButton :isExpanded="isExpanded" @toggle="toggleSidebar" />
@@ -57,6 +58,10 @@ defineOptions({
 
 const isExpanded = ref(false)
 const showLabels = ref(false)
+
+defineExpose({
+  isExpanded,
+})
 
 const generalItem = [{ to: '/visao-geral', icon: 'house-line', label: 'Visão geral' }]
 const featureItems = [

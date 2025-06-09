@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[35px] py-[30px] w-full h-full">
+  <div class="px-6 lg:px-[35px] py-[30px] w-full h-full">
     <header class="border-b border-gray-50 mb-6">
       <div class="flex items-center gap-4 mb-[18px]">
         <img src="@/assets/icons/house-line.svg" alt="House" />

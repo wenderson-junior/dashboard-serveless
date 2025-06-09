@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/visao-geral'
+      redirect: '/visao-geral',
     },
     {
       path: '/visao-geral',
@@ -18,6 +18,10 @@ const router = createRouter({
       path: '/assinaturas',
       name: 'subscription',
       component: SubscriptionView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/visao-geral',
     },
   ],
 })
