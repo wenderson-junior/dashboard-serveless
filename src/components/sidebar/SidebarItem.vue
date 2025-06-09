@@ -7,8 +7,11 @@
       isExpanded ? 'w-full justify-start gap-2' : 'justify-center',
     ]"
   >
-    <!-- TODO: Add icon color -->
-    <img :src="iconSrc" :alt="label" />
+    <component
+      :is="svgIcon"
+      class="size-6"
+      :class="isActive ? 'text-active' : 'text-regular-500'"
+    />
     <span
       v-if="isExpanded && showLabels"
       class="text-sm font-inter font-normal whitespace-nowrap"
@@ -20,7 +23,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { getIconPath } from '@/utils/iconLoader'
+import { getSvgIcon } from '@/utils/iconLoader'
 
 defineOptions({
   name: 'SidebarItem',
@@ -53,5 +56,8 @@ const route = useRoute()
 const isActive = computed(() => {
   return route.path === props.to
 })
-const iconSrc = computed(() => getIconPath(props.icon))
+
+const svgIcon = computed(() => {
+  return getSvgIcon(props.icon)
+})
 </script>
