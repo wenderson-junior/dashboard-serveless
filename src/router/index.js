@@ -1,19 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ReportsView from '../views/ReportsView.vue'
+import GeneralView from '../views/GeneralView.vue'
+import SubscriptionView from '../views/SubscriptionView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
+      redirect: '/visao-geral'
     },
     {
-      path: '/reports',
-      name: 'reports',
-      component: ReportsView,
+      path: '/visao-geral',
+      name: 'general',
+      component: GeneralView,
+    },
+    {
+      path: '/assinaturas',
+      name: 'subscription',
+      component: SubscriptionView,
     },
   ],
 })
