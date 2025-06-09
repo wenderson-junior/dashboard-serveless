@@ -3,7 +3,8 @@
     <div class="bg-gray-500 rounded-lg flex justify-center align-center p-[6px]">
       <img src="@/assets/icons/user.svg" alt="User" />
     </div>
-    <div class="font-inter flex flex-col">
+    <!-- Informações do usuário apenas para telas md e maiores -->
+    <div class="hidden md:flex font-inter flex-col">
       <div>
         <span class="font-semibold text-regular-800 text-lg">Olá, </span>
         <span class="font-normal text-regular-500 text-lg">Cliente!</span>
