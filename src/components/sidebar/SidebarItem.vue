@@ -1,6 +1,8 @@
 <template>
-  <router-link
-    :to="to"
+  <component
+    :is="action ? 'button' : 'router-link'"
+    v-bind="action ? {} : { to }"
+    @click="action && action()"
     :class="[
       'flex items-center rounded-lg transition-colors relative px-[10px] size-11',
       isActive ? 'bg-active/15 text-regular-800' : 'text-regular-500 hover:bg-gray-100',
@@ -17,7 +19,7 @@
       class="text-sm font-inter font-normal whitespace-nowrap"
       >{{ label }}</span
     >
-  </router-link>
+  </component>
 </template>
 
 <script setup>
@@ -32,7 +34,7 @@ defineOptions({
 const props = defineProps({
   to: {
     type: String,
-    required: true,
+    default: '',
   },
   icon: {
     type: String,
@@ -49,6 +51,10 @@ const props = defineProps({
   showLabels: {
     type: Boolean,
     default: false,
+  },
+  action: {
+    type: Function,
+    default: null,
   },
 })
 

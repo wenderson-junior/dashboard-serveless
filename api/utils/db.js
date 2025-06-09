@@ -1,0 +1,269 @@
+const db = {
+  users: [
+    {
+      id: '1',
+      name: 'Admin',
+      email: 'admin@cappta.com',
+      password: 'admin123',
+      role: 'admin',
+      photo: null,
+    },
+    {
+      id: '2',
+      name: 'Gerente',
+      email: 'gerente@cappta.com',
+      password: 'senha123',
+      role: 'manager',
+      photo: null,
+    },
+  ],
+  clients: [
+    {
+      id: '1',
+      name: 'Empresa ABC Ltda',
+      email: 'contato@abc.com',
+      phone: '(11) 98765-4321',
+      document: '12.345.678/0001-90',
+      address: 'Av. Paulista, 1000, São Paulo - SP',
+      createdAt: '2025-01-10T08:30:00Z',
+    },
+    {
+      id: '2',
+      name: 'Comércio XYZ',
+      email: 'financeiro@xyz.com',
+      phone: '(11) 91234-5678',
+      document: '98.765.432/0001-10',
+      address: 'Rua Augusta, 500, São Paulo - SP',
+      createdAt: '2025-02-15T14:45:00Z',
+    },
+    {
+      id: '3',
+      name: 'Restaurante Sabor & Cia',
+      email: 'contato@saborecia.com',
+      phone: '(11) 95555-9999',
+      document: '45.678.901/0001-23',
+      address: 'Rua Oscar Freire, 123, São Paulo - SP',
+      createdAt: '2025-03-05T10:15:00Z',
+    },
+  ],
+  subscriptions: [
+    {
+      id: '1',
+      clientId: '1',
+      name: 'Plano Premium',
+      value: '199.90',
+      frequency: 'monthly',
+      paymentMethods: {
+        pix: true,
+        debitCard: true,
+        creditCard: true,
+      },
+      feeOptions: {
+        passFees: false,
+        limitInstallments: true,
+      },
+      duration: '12-months',
+      proportionalValue: true,
+      description: 'Plano completo com todas as funcionalidades',
+      chargeDate: '15',
+      status: 'active',
+      startDate: '2025-01-15',
+      endDate: '2026-01-15',
+      createdAt: '2025-01-15T10:30:00Z',
+    },
+    {
+      id: '2',
+      clientId: '2',
+      name: 'Plano Básico',
+      value: '89.90',
+      frequency: 'monthly',
+      paymentMethods: {
+        pix: true,
+        debitCard: false,
+        creditCard: true,
+      },
+      feeOptions: {
+        passFees: true,
+        limitInstallments: false,
+      },
+      duration: 'unlimited',
+      proportionalValue: false,
+      description: 'Plano básico com funcionalidades essenciais',
+      chargeDate: '10',
+      status: 'active',
+      startDate: '2025-03-10',
+      endDate: null,
+      createdAt: '2025-03-10T14:15:00Z',
+    },
+    {
+      id: '3',
+      clientId: '3',
+      name: 'Plano Empresarial',
+      value: '499.90',
+      frequency: 'Anual',
+      paymentMethods: {
+        pix: true,
+        debitCard: true,
+        creditCard: true,
+      },
+      feeOptions: {
+        passFees: false,
+        limitInstallments: true,
+      },
+      duration: '24-months',
+      proportionalValue: true,
+      description: 'Plano empresarial com suporte prioritário',
+      chargeDate: '01',
+      status: 'pending',
+      startDate: '2025-06-01',
+      endDate: '2027-06-01',
+      createdAt: '2025-05-28T09:45:00Z',
+    },
+  ],
+  dashboard: {
+    tpvProgression: {
+      currentMonth: {
+        value: '15.149.365,27',
+        showCurrency: true,
+      },
+      previousMonth: {
+        value: '12.970.346,98',
+        showCurrency: true,
+      },
+      chartData: [
+        { period: '9mi', value: 9800000 },
+        { period: '12mi', value: 12970346.98 },
+        { period: '15mi', value: 15149365.27 },
+      ],
+    },
+    averageTicket: {
+      currentMonth: { value: '421,67' },
+      previousMonth: { value: '393,68' },
+    },
+    transactionsCount: {
+      currentMonth: { value: '12.927' },
+      previousMonth: { value: '16.946' },
+    },
+    markupPercentage: {
+      showPercentageIcon: false,
+      currentMonth: { value: '2.1' },
+      previousMonth: { value: '1.8' },
+    },
+  },
+}
+
+const findUserByEmail = (email) => {
+  return db.users.find((user) => user.email === email)
+}
+
+const findUserById = (id) => {
+  return db.users.find((user) => {
+    return String(user.id) === String(id)
+  })
+}
+
+const createUser = (userData) => {
+  const newId = (Math.max(...db.users.map((u) => parseInt(u.id))) + 1).toString()
+  const newUser = { id: newId, ...userData }
+  db.users.push(newUser)
+  return newUser
+}
+
+const findClientById = (id) => {
+  return db.clients.find((client) => client.id === id)
+}
+
+const findClientByEmail = (email) => {
+  return db.clients.find((client) => client.email === email)
+}
+
+const createClient = (clientData) => {
+  const newId = (Math.max(...db.clients.map((c) => parseInt(c.id))) + 1).toString()
+  const newClient = {
+    id: newId,
+    ...clientData,
+    createdAt: new Date().toISOString(),
+  }
+  db.clients.push(newClient)
+  return newClient
+}
+
+const getAllClients = () => {
+  return db.clients
+}
+
+const getAllSubscriptions = (clientId = null) => {
+  if (clientId) {
+    return db.subscriptions.filter((sub) => sub.clientId === clientId)
+  }
+  return db.subscriptions
+}
+
+const getSubscriptionById = (id, clientId = null) => {
+  if (clientId) {
+    return db.subscriptions.find((sub) => sub.id === id && sub.clientId === clientId)
+  }
+  return db.subscriptions.find((sub) => sub.id === id)
+}
+
+const createSubscription = (subData) => {
+  const newId = (Math.max(...db.subscriptions.map((s) => parseInt(s.id))) + 1).toString()
+  const newSubscription = {
+    id: newId,
+    ...subData,
+    createdAt: new Date().toISOString(),
+  }
+  db.subscriptions.push(newSubscription)
+  return newSubscription
+}
+
+const updateSubscription = (id, clientId, updateData) => {
+  const index = db.subscriptions.findIndex((sub) => sub.id === id && sub.clientId === clientId)
+  if (index === -1) return null
+
+  db.subscriptions[index] = { ...db.subscriptions[index], ...updateData }
+  return db.subscriptions[index]
+}
+
+const deleteSubscription = (id, clientId) => {
+  const index = db.subscriptions.findIndex((sub) => sub.id === id && sub.clientId === clientId)
+  if (index === -1) return false
+
+  db.subscriptions.splice(index, 1)
+  return true
+}
+
+const getDashboardData = () => {
+  return db.dashboard
+}
+
+const addSubscription = (subscription) => {
+  db.subscriptions.push(subscription)
+  return subscription
+}
+
+const updateUser = (id, updateData) => {
+  const index = db.users.findIndex((user) => String(user.id) === String(id))
+  if (index === -1) return null
+
+  db.users[index] = { ...db.users[index], ...updateData }
+  return db.users[index]
+}
+
+export {
+  findUserByEmail,
+  findUserById,
+  createUser,
+  findClientById,
+  findClientByEmail,
+  createClient,
+  getAllClients,
+  getAllSubscriptions,
+  getSubscriptionById,
+  createSubscription,
+  updateSubscription,
+  deleteSubscription,
+  getDashboardData,
+  updateUser,
+  addSubscription,
+}
