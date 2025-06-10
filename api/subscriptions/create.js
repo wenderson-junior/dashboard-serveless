@@ -1,5 +1,5 @@
-import { verifyToken } from '../utils/auth'
-import { createSubscription } from '../utils/db'
+import { verifyToken } from '../utils/auth.js'
+import { createSubscription } from '../utils/db.js'
 
 export default async (req, res) => {
   if (req.method !== 'POST') {

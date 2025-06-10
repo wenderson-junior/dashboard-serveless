@@ -1,5 +1,5 @@
-import { getSubscriptionById, updateSubscription, deleteSubscription } from '../utils/db'
-import { verifyToken } from '../utils/auth'
+import { getSubscriptionById, updateSubscription, deleteSubscription } from '../utils/db.js'
+import { verifyToken } from '../utils/auth.js'
 
 export default async (req, res) => {
   try {

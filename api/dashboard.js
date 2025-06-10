@@ -1,5 +1,5 @@
-import { getDashboardData } from './utils/db'
-import { verifyToken } from './utils/auth'
+import { getDashboardData } from './utils/db.js'
+import { verifyToken } from './utils/auth.js'
 
 export default async (req, res) => {
   if (req.method !== 'GET') {
