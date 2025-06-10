@@ -43,23 +43,20 @@
         :isExpanded="isExpanded"
         :showLabels="showLabels"
       />
-      <!-- Botão de logout com o mesmo layout dos outros itens -->
       <button
         @click="handleLogout"
         :class="[
-          'flex items-center rounded-lg transition-colors relative px-[10px] size-11',
+          'flex items-center rounded-lg transition-colors relative px-[10px] size-11 cursor-pointer',
           'text-regular-500 hover:bg-gray-100',
           isExpanded ? 'w-full justify-start gap-2' : 'justify-center',
         ]"
       >
-        <component
-          :is="getSvgIcon('sign-out')"
-          class="size-6 text-regular-500"
-        />
+        <component :is="getSvgIcon('sign-out')" class="size-6 text-regular-500" />
         <span
           v-if="isExpanded && showLabels"
           class="text-sm font-inter font-normal whitespace-nowrap"
-        >Sair</span>
+          >Sair</span
+        >
       </button>
     </nav>
   </aside>
@@ -83,15 +80,15 @@ defineExpose({
   isExpanded,
 })
 
-const generalItem = [{ to: '/visao-geral', icon: 'house-line', label: 'Visão geral' }]
+const generalItem = [{ to: '/', icon: 'house-line', label: 'Visão geral' }]
 const featureItems = [
   { to: '/assinaturas', icon: 'invoice', label: 'Assinaturas' },
-  { to: '/', icon: 'chart-bar', label: 'Progressão' },
-  { to: '/', icon: 'note-pencil', label: 'Relatórios' },
+  { to: '#', icon: 'chart-bar', label: 'Progressão' },
+  { to: '#', icon: 'note-pencil', label: 'Relatórios' },
 ]
 const portalItems = [
   { to: '/configuracoes', icon: 'gear-six', label: 'Config.' },
-  { to: '/', icon: 'question', label: 'Ajuda' },
+  { to: '#', icon: 'question', label: 'Ajuda' },
 ]
 
 const toggleSidebar = () => {
