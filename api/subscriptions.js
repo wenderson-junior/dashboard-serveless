@@ -1,6 +1,6 @@
-import { verifyToken } from './utils/auth'
-import { getAllSubscriptions } from './utils/db'
-import createSubscription from './subscriptions/create'
+import { verifyToken } from './utils/auth.js'
+import { getAllSubscriptions } from './utils/db.js'
+import createSubscription from './subscriptions/create.js'
 
 // Handler para requisições à rota /subscriptions
 export default async (req, res) => {
