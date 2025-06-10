@@ -10,55 +10,51 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      redirect: '/visao-geral',
-    },
-    {
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/registro',
       name: 'register',
       component: RegisterView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
-      path: '/visao-geral',
+      path: '/',
       name: 'general',
       component: GeneralView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/assinaturas',
       name: 'subscription',
       component: SubscriptionView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/configuracoes',
       name: 'settings',
       component: UserSettingsView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/visao-geral',
+      redirect: '/',
     },
   ],
 })
 
 // Verificação de autenticação nas rotas
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
   const isAuthenticated = authService.isAuthenticated()
 
   // Se a rota requer autenticação e o usuário não está autenticado, redirecionar para login
   if (requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
-  } 
+  }
   // Se o usuário está autenticado e tenta acessar login/registro, redirecionar para visão geral
   else if (isAuthenticated && (to.name === 'login' || to.name === 'register')) {
     next({ name: 'general' })
