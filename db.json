@@ -18,9 +18,9 @@
     },
     {
       "id": "5",
-      "name": "teste",
-      "email": "teste@teste.com",
-      "password": "teste123",
+      "name": "Cliente",
+      "email": "cliente@cliente.com",
+      "password": "cliente123",
       "role": "user",
       "photo": null
     }
